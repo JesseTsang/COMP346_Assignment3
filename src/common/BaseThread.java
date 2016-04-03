@@ -50,6 +50,7 @@ public class BaseThread extends Thread
 	public BaseThread()
 	{
 		setTID();
+		System.out.println("setTID: " + getTID());
 	}
 
 	/**

@@ -1,3 +1,5 @@
+import java.util.Random;
+
 import common.BaseThread;
 
 /**
@@ -12,6 +14,8 @@ public class Philosopher extends BaseThread
 	 * Max time an action can take (in milliseconds)
 	 */
 	public static final long TIME_TO_WASTE = 1000;
+	
+	private Random randomTalkChance;
 
 	/**
 	 * The act of eating.
@@ -25,9 +29,11 @@ public class Philosopher extends BaseThread
 	{
 		try
 		{
-			// ...
-			sleep((long)(Math.random() * TIME_TO_WASTE));
-			// ...
+			System.out.println("Philosopher " + getTID() + " has started eating.");
+			yield();
+			randomSleep();
+			yield();
+			System.out.println("Philosopher " + getTID() + " has done eating.");
 		}
 		catch(InterruptedException e)
 		{
@@ -47,7 +53,20 @@ public class Philosopher extends BaseThread
 	 */
 	public void think()
 	{
-		// ...
+		try 
+		{
+			System.out.println("Philosopher " + getTID() + " has started thinking.");
+			yield();
+			randomSleep();
+			yield();
+			System.out.println("Philosopher " + getTID() + " has done thinking.");
+		} 
+		catch (InterruptedException e)
+		{
+			System.err.println("Philosopher.think():");
+			DiningPhilosophers.reportException(e);
+			System.exit(1);
+		}	
 	}
 
 	/**
@@ -59,12 +78,19 @@ public class Philosopher extends BaseThread
 	 * - The print that they are done talking.
 	 */
 	public void talk()
-	{
-		// ...
-
+	{	
+		yield();
 		saySomething();
-
-		// ...
+		yield();		
+	}
+	
+	/**
+	 * Philosopher will sleep() a random amount of time.
+	 * @throws InterruptedException 
+	 */
+	public void randomSleep() throws InterruptedException
+	{
+		sleep((long)(Math.random() * TIME_TO_WASTE));	
 	}
 
 	/**
@@ -75,11 +101,8 @@ public class Philosopher extends BaseThread
 		for(int i = 0; i < DiningPhilosophers.DINING_STEPS; i++)
 		{
 			DiningPhilosophers.soMonitor.pickUp(getTID());
-
 			eat();
-
 			DiningPhilosophers.soMonitor.putDown(getTID());
-
 			think();
 
 			/*
@@ -87,11 +110,14 @@ public class Philosopher extends BaseThread
 			 * A decision is made at random whether this particular
 			 * philosopher is about to say something terribly useful.
 			 */
-			if(true == false)
+			randomTalkChance = new Random();
+			if(randomTalkChance.nextBoolean() == true)
 			{
-				// Some monitor ops down here...
+				DiningPhilosophers.soMonitor.requestTalk();
+				System.out.println("Philosopher " + getTID() + " has started talking.");
 				talk();
-				// ...
+				DiningPhilosophers.soMonitor.endTalk();
+				System.out.println("Philosopher " + getTID() + " has done talking.");
 			}
 
 			yield();
