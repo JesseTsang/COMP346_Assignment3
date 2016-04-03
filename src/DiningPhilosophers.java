@@ -47,6 +47,27 @@ public class DiningPhilosophers
 			 * or the default if no arguments supplied.
 			 */
 			int iPhilosophers = DEFAULT_NUMBER_OF_PHILOSOPHERS;
+			
+			if(argv.length > 0)
+			{
+				try
+				{
+					iPhilosophers = Integer.parseInt(argv[0]);
+					
+					if (iPhilosophers < 1)
+					{
+						System.out.println("Error: " + argv[0] + " is not a positive integer.");
+						System.out.println("Usage: java DiningPhilosophers [NUMBER_OF_PHILOSOPHERS] (Posivite number only).");
+						System.exit(1);			
+					}
+				}
+				catch(NumberFormatException e) //This catch all the cases where argument argv is not an integer.
+				{
+					System.out.println("Error: " + argv[0] + " is not a integer.");
+					System.out.println("Usage: java DiningPhilosophers [NUMBER_OF_PHILOSOPHERS] (Posivite number only).");
+					System.exit(1);		
+				}	
+			}
 
 			// Make the monitor aware of how many philosophers there are
 			soMonitor = new Monitor(iPhilosophers);
