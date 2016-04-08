@@ -1,0 +1,9 @@
+//Using -1 as argument
+
+Error: -1 is not a positive integer.
+Usage: java DiningPhilosophers [NUMBER_OF_PHILOSOPHERS] (Posivite number only).
+
+//Using 0
+
+Error: 0 is not a positive integer.
+Usage: java DiningPhilosophers [NUMBER_OF_PHILOSOPHERS] (Posivite number only).
